@@ -1,4 +1,37 @@
-﻿@model IEnumerable<jmannionBugTracker.Models.AdminUserViewModel>
+﻿@model jmannionBugTracker.Models.UserRoleViewModel
 
 
 
+<h2> Admin Role Management</h2>
+
+
+@using (Html.BeginForm("SelectRole", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m=>Model.Id)
+    <hr />
+    <h4>User Name : </h4>
+    <div class="row" style="margin-left: 5px">
+        @Model.FirstName
+        @Model.LastName
+    </div>
+    <hr />
+    <h4>Choose Role(s) To Be Assigned: </h4>
+    @Html.ListBox("SelectedRoles", Model.UserRoles)
+    <h6>
+        <em>
+            (To choose multiple roles "Control + click" )
+        </em>
+    </h6>
+    <hr />
+
+    <button type="submit">
+        Submit
+    </button>
+}
+
+<hr />
+
+<button class="btn-sm btn-default">
+    @Html.ActionLink("Back To List", "Index")
+</button>

@@ -39,7 +39,7 @@ namespace jmannionBugTracker.Controllers
             roleUser.LastName = user.LastName;
             roleUser.DisplayName = user.DisplayName;
             roleUser.SelectedRoles = helper.ListUserRoles(user.Id).ToArray();
-            roleUser.UserRoles = new MultiSelectList(db.Roles,"Id", "Name", roleUser.SelectedRoles);
+            roleUser.UserRoles = new MultiSelectList(db.Roles,"Name", "Name", roleUser.SelectedRoles);
 
             return View(roleUser);
 
@@ -51,15 +51,15 @@ namespace jmannionBugTracker.Controllers
         {
 
             var user = db.Users.Find(model.Id);
-            foreach (var rolemv in db.Roles.Select(r => r.Id).ToList())
+            foreach (var rolemv in db.Roles.Select(r => r.Name).ToList())
             {
                 helper.RemoveUserFromRole(user.Id, rolemv);
             }
 
-            foreach (var roleadd in model.SelectedRoles)
+            foreach (var rolemv in model.SelectedRoles)
             {
 
-                helper.AddUserToRole(user.Id, roleadd);
+                helper.AddUserToRole(user.Id, rolemv);
             }
             ViewBag.confim = "User's role has been sucessfully modified";
             return RedirectToAction("Index");
