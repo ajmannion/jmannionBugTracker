@@ -17,8 +17,10 @@ namespace jmannionBugTracker.Models
        
         public Project()
         {
-            this.Tickets = new HashSet<Ticket>();
-            this.Users = new HashSet<ApplicationUser>();
+            Tickets = new HashSet<Ticket>();
+            Users = new HashSet<ApplicationUser>();
+            // this.Tickets = new HashSet<Ticket>();
+            //this.Users = new HashSet<ApplicationUser>();
         }
         public virtual ICollection<Ticket> Tickets { get; set; }
 

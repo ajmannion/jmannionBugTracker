@@ -8,6 +8,7 @@ namespace jmannionBugTracker.Models
     public class ProjectAssignHelper
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        UserRoleAssignHelper userHelper = new UserRoleAssignHelper();
         public bool IsUserOnProject(string userId, int projectId)
         {
             var project = db.Projects.Find(projectId);
@@ -40,11 +41,56 @@ namespace jmannionBugTracker.Models
         }
     public List<ApplicationUser> ListUsersNotOnProject (int projectId)
     {
-        Project  project= db.Projects.Find(projectId);
-        var userObj = project.Users;
-        return db.Users.Where(u => !userObj.Contains(u)).ToList();
+            //Project  project= db.Projects.Find(projectId);
+            //  var userIds = project.Users.Select(u => u.Id); ;
+            // return db.Users.Where(u => !userIds.Contains(u.Id)).ToList();
+            return db.Users.Where(u => u.Projects.All(p => p.Id != projectId)).ToList();
 
     }
+        public List<Project> ListProjects(string user)
+
+        {
+            var users = db.Users.Find(user);
+
+            var resultList = new List<Project>();
+            var userProjects = new List<Project>();
+
+            // Find user projects
+            if (userHelper.IsUserInRole(users.Id, "Admin"))
+            {
+                userProjects = db.Projects.ToList();
+
+            }
+            else if (userHelper.IsUserInRole(users.Id, "ProjectManager"))//project manager list
+            {
+                var projOwnerId = db.Users.Find(users.Id);
+
+                var projOwnerName = db.Users.FirstOrDefault(x => x.Id == projOwnerId.Id).DisplayName;
+
+                userProjects = db.Projects.Where(p => p.Owner.Contains(projOwnerName)).ToList();
+            }
+
+            else
+            {
+                var UserId = db.Users.Find(users.Id);
+                userProjects = UserId.Projects.ToList();
+
+            }
+
+            foreach (var project in userProjects)
+            {
+                // Only return projects not marked as complete
+                Project projects = new Project();
+                if (!project.Status)
+                {
+                    resultList.Add(project);
+                }
+            }
+
+            return resultList;
+
+        }
+
 
     }
 }

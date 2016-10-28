@@ -7,17 +7,21 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using jmannionBugTracker.Models;
+using Microsoft.AspNet.Identity;
 
 namespace jmannionBugTracker.Controllers
 {
     public class ProjectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        ProjectAssignHelper helper = new ProjectAssignHelper();
 
         // GET: Projects
+        [Authorize(Roles = "Admin,Project Manager")]
         public ActionResult Index()
         {
-            return View(db.Projects.ToList());
+            var users = helper.ListProjects(User.Identity.GetUserId());
+            return View(users);
         }
 
         // GET: Projects/Details/5
@@ -36,8 +40,12 @@ namespace jmannionBugTracker.Controllers
         }
 
         // GET: Projects/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
+            var role = db.Roles.FirstOrDefault(r => r.Name == "Project Manager");
+            var users = db.Users.Where(u => u.Roles.Any(r => r.RoleId == role.Id)).ToList();
+            ViewBag.OwnerName = new SelectList(users, "Id", "LastName");
             return View();
         }
 
@@ -46,6 +54,7 @@ namespace jmannionBugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize (Roles ="Admin,Project Manager")]
         public ActionResult Create([Bind(Include = "Id,Name,Description,Owner,Status")] Project project)
         {
             if (ModelState.IsValid)
@@ -123,5 +132,11 @@ namespace jmannionBugTracker.Controllers
             }
             base.Dispose(disposing);
         }
+
+      
+
+
     }
+
+
 }

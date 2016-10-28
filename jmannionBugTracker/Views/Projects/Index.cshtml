@@ -5,7 +5,7 @@
 }
 
 <h2>Index</h2>
-
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" />
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -20,9 +20,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Owner)
         </th>
-        <th>
+      @*  <th>
             @Html.DisplayNameFor(model => model.Status)
-        </th>
+        </th>*@
         <th></th>
     </tr>
 
@@ -37,9 +37,9 @@
         <td>
             @Html.DisplayFor(modelItem => item.Owner)
         </td>
-        <td>
+       @* <td>
             @Html.DisplayFor(modelItem => item.Status)
-        </td>
+        </td>*@
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |
@@ -49,3 +49,17 @@
 }
 
 </table>
+@section scripts{
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!--DataTables-->
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+
+    <script>
+           $('.table').DataTable();
+    </script>
+    <script>
+       $(document).ready(function () {
+           $('#multiList').multiselect();
+       });
+    </script>
+}
