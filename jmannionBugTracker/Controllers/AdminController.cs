@@ -35,7 +35,7 @@ namespace jmannionBugTracker.Controllers
             var user = db.Users.Find(id);
             var roleUser = new UserRoleViewModel();
             roleUser.Id = user.Id;
-            roleUser.FirstName = user.Firstname;
+            roleUser.FirstName = user.Id;
             roleUser.LastName = user.LastName;
             roleUser.DisplayName = user.DisplayName;
             roleUser.SelectedRoles = helper.ListUserRoles(user.Id).ToArray();

@@ -133,10 +133,52 @@ namespace jmannionBugTracker.Controllers
             base.Dispose(disposing);
         }
 
-      
+       // Get Admin/SelectRole/5
+         [Authorize(Roles = "Admin,Project Manager")]
+
+        public ActionResult AssignToProject(int id)
+        {
+            var project = db.Projects.Find(id);
+            var ProjectUser = new AssignToProjectVM();
+            ProjectUser.Id = id;
+            ProjectUser.FirstName = ProjectUser.FirstName;
+            ProjectUser.Lastname = ProjectUser.Lastname;
+            ProjectUser.SelectedUsers = helper.ListUserOnProject(project.Id).Select(p => p.Id).ToArray();
+            ProjectUser.userList = new MultiSelectList(db.Users, "Id", "Firstname", ProjectUser.SelectedUsers);
+
+             return View(ProjectUser);
+
+        }
+
+        //Post selectroles/5
+        [HttpPost]
+        [Authorize(Roles = "Admin,Project Manager")]
+        public ActionResult AssignToProject(AssignToProjectVM model)
+        {
+
+            foreach (var userRmv in db.Users.Select(r => r.Id).ToList())
+            {
+                helper.RemoveUserFromProject(userRmv, model.Id);
+            }
+
+            foreach (var userTmv in model.SelectedUsers)
+            {
+
+                helper.AddUserToProject(userTmv, model.Id);
+            }
+           // ViewBag.confim = "Project has been sucessfully modified";
+            return RedirectToAction("Details", "Projects", new { id = model.Id });
+        }
+
+
+
+
+
+
+
+
 
 
     }
-
 
 }

@@ -151,7 +151,7 @@ namespace jmannionBugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Firstname =model.FirstName,LastName=model.LastName,DisplayName=model.DisplayName };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Id =model.FirstName,LastName=model.LastName,DisplayName=model.DisplayName };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
