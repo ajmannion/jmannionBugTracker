@@ -11,7 +11,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.user.Firstname)
+                @Html.DisplayNameFor(model => model.user.FirstName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.user.LastName)
@@ -31,7 +31,7 @@
                 @Html.AntiForgeryToken()
                 <tr>
                     <td>
-                        @item.user.Firstname
+                        @item.user.FirstName
                     </td>
                     <td>
                         @item.user.LastName
@@ -40,12 +40,12 @@
                     <td>
                         @foreach (var items in item.role)
                         {
-                            @items  <span></span>
+                            @items <span>,</span>
                         }
                     </td>
                     <td>
                         <button class="btn-xs btn-default">
-                            @Html.ActionLink("Edit Roles", "SelectRole", new { Id = item.user.Id })
+                            @Html.ActionLink("Edit Roles", "SelectRole", new { id = item.user.Id })
                         </button>
                     </td>
 

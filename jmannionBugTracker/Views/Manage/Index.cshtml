@@ -10,7 +10,13 @@
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>Password:</dt>
+        <dt>Change User Information:</dt>
+        <dd>
+        
+            {
+                @Html.ActionLink("Change your User Information", "ChangeUserInfo")
+            }
+<dt>Password:</dt>
         <dd>
             [
             @if (Model.HasPassword)

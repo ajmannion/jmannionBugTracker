@@ -17,7 +17,7 @@ namespace jmannionBugTracker.Controllers
         ProjectAssignHelper helper = new ProjectAssignHelper();
 
         // GET: Projects
-        [Authorize(Roles = "Admin,Project Manager")]
+        [Authorize(Roles = "Admin,Project Manager,Submitter,Developer")]
         public ActionResult Index()
         {
             var users = helper.ListProjects(User.Identity.GetUserId());
@@ -79,6 +79,9 @@ namespace jmannionBugTracker.Controllers
             {
                 return HttpNotFound();
             }
+            var role = db.Roles.FirstOrDefault(r => r.Name == "Project Manager");
+            var users = db.Users.Where(u => u.Roles.Any(r => r.RoleId == role.Id)).ToList();
+            ViewBag.OwnerName = new SelectList(users, "Id", "LastName");
             return View(project);
         }
 
@@ -91,6 +94,7 @@ namespace jmannionBugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                project.Owner = db.Users.FirstOrDefault(x => x.Id == project.Owner).LastName;
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -140,11 +144,12 @@ namespace jmannionBugTracker.Controllers
         {
             var project = db.Projects.Find(id);
             var ProjectUser = new AssignToProjectVM();
+            ProjectUser.ProjectName = project.Name;
             ProjectUser.Id = id;
             ProjectUser.FirstName = ProjectUser.FirstName;
             ProjectUser.Lastname = ProjectUser.Lastname;
             ProjectUser.SelectedUsers = helper.ListUserOnProject(project.Id).Select(p => p.Id).ToArray();
-            ProjectUser.userList = new MultiSelectList(db.Users, "Id", "Firstname", ProjectUser.SelectedUsers);
+            ProjectUser.userList = new MultiSelectList(db.Users, "Id", "Lastname", ProjectUser.SelectedUsers);
 
              return View(ProjectUser);
 
@@ -160,11 +165,13 @@ namespace jmannionBugTracker.Controllers
             {
                 helper.RemoveUserFromProject(userRmv, model.Id);
             }
-
-            foreach (var userTmv in model.SelectedUsers)
+            if (model.SelectedUsers != null)
             {
+                foreach (var userTmv in model.SelectedUsers)
+                {
 
-                helper.AddUserToProject(userTmv, model.Id);
+                    helper.AddUserToProject(userTmv, model.Id);
+                }
             }
            // ViewBag.confim = "Project has been sucessfully modified";
             return RedirectToAction("Details", "Projects", new { id = model.Id });

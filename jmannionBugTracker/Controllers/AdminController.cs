@@ -55,11 +55,13 @@ namespace jmannionBugTracker.Controllers
             {
                 helper.RemoveUserFromRole(user.Id, rolemv);
             }
-
-            foreach (var rolemv in model.SelectedRoles)
+            if (model.SelectedRoles != null)
             {
+                foreach (var rolemv in model.SelectedRoles)
+                {
 
-                helper.AddUserToRole(user.Id, rolemv);
+                    helper.AddUserToRole(user.Id, rolemv);
+                }
             }
             ViewBag.confim = "User's role has been sucessfully modified";
             return RedirectToAction("Index");

@@ -34,17 +34,43 @@
             @Html.DisplayFor(model => model.Owner)
         </dd>
 
-        <dt>
+       @* <dt>
             @Html.DisplayNameFor(model => model.Status)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Status)
-        </dd>
+        </dd>*@
 
     </dl>
+    <hr />
+    <dt>
+        <h5><b>Assigned Users</b></h5>
+    </dt>
+    <br />
+    <dd>
+        @foreach (var item in Model.Users)
+
+        {
+                @Html.DisplayFor(model => item.FirstName)
+                <span>  </span>
+                    @Html.DisplayFor(model => item.LastName) 
+                    <br />
+                    }
+
+</dd>
+
+
+
+
+
+
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    <button class="btn-xs btn-default">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) 
+        </button>
+    <button class="btn-xs btn-default">
+        @Html.ActionLink("Back to List", "Index")
+        </button>
 </p>

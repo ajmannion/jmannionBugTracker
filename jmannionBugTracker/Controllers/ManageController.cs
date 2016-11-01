@@ -12,10 +12,11 @@ namespace jmannionBugTracker.Controllers
 {
     [Authorize]
     public class ManageController : Controller
+        
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        ApplicationDbContext db = new ApplicationDbContext();
         public ManageController()
         {
         }
@@ -321,7 +322,44 @@ namespace jmannionBugTracker.Controllers
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
+        // Get: /Manage/ChagngeUserInformation
+        public ActionResult ChangeUserInfo()
+        {
 
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            return View(user);
+        }
+
+        // Post: /Manage/ChagngeUserInformation
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeUserInfo([Bind(Include = "Id,FirstName,LastName,DisplayName,Email")] ApplicationUser User)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                db.Users.Attach(User);
+                User.UserName = User.Email;
+               // db.Entry(User).Property("Id").IsModified = true;
+                db.Entry(User).Property("FirstName").IsModified = true;
+                db.Entry(User).Property("LastName").IsModified = true;
+                db.Entry(User).Property("DisplayName").IsModified = true;
+                db.Entry(User).Property("Email").IsModified = false;
+                //db.Entry(User).Property("PasswordHash").IsModified = false;
+                //db.Entry(User).Property("PhoneNumber").IsModified = false;
+                //db.Entry(User).Property("LockoutEndDateUtc").IsModified = false;
+                //db.Entry(User).Property("UserName").IsModified = false;
+                //db.SaveChanges();
+
+                //db.Entry(User).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(User);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)
