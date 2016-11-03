@@ -225,7 +225,7 @@ namespace jmannionBugTracker.Controllers
             {
                 ticket.Updated = DateTime.Now;
                 // db.Entry(ticket).State = EntityState.Modified;
-                
+                db.Tickets.Attach(ticket);
                 db.Entry(ticket).Property("TicketTypeId").IsModified = false;
                 db.Entry(ticket).Property("ProjectId").IsModified = false;
                 db.Entry(ticket).Property("TicketPriorityId").IsModified = false;
