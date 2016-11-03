@@ -12,7 +12,7 @@
 
     <div class="form-horizontal">
         <h4>Ticket</h4>
-        <input type="hidden" name="Ticketstatus" value=1 />
+       @*<input type="hidden" name="Ticketstatus" value=1 />*@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control" } })
@@ -37,7 +37,7 @@
                 @Html.EditorFor(model => model.Updated, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Updated, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.ProjectId, "ProjectId", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -63,15 +63,15 @@
             </div>
         </div>
 
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.TicketStatusId, "TicketStatusId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("TicketStatusId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.TicketStatusId, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div*@>
 
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.OwnerUserId, "OwnerUserId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("OwnerUserId", null, htmlAttributes: new { @class = "form-control" })
@@ -84,7 +84,7 @@
             <div class="col-md-10">
                 @Html.DropDownList("AssignedToUserId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.AssignedToUserId, "", new { @class = "text-danger" })
-            </div>
+            </div>*@
         </div>
 
         <div class="form-group">
@@ -92,7 +92,7 @@
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
-    </div>
+
 }
 
 <div>

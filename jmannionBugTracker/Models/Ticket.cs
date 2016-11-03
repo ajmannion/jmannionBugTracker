@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -10,11 +11,11 @@ namespace jmannionBugTracker.Models
 
         public int Id { get; set; }
         public string Title { get; set; }
-
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime Created { get; set; }
-
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? Updated { get; set; }
-
+      
         public int ProjectId {get; set;}
 
         public int TicketTypeId { get; set; }

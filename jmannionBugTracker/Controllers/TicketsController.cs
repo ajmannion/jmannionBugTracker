@@ -14,15 +14,39 @@ namespace jmannionBugTracker.Controllers
     public class TicketsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        ProjectAssignHelper helper = new ProjectAssignHelper();
 
         // GET: Tickets
-        [Authorize(Roles = "Admin,Project Manager,Submitter,Developer")]
+        [Authorize]
         public ActionResult Index()
         {
+            var tickets = new List<Ticket>();
+            if (User.IsInRole("Admin"))
+            {
 
-            var tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View(tickets.ToList());
+              tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType).ToList();
+
+            }
+
+            else if (User.IsInRole("Project Manager"))
+            {
+               tickets= db.Tickets.Include(t => t.AssignedToUser).ToList();
+              
+            }
+            else if (User.IsInRole("Developer"))
+            {
+               tickets = db.Tickets.Include(t => t.AssignedToUser).ToList();
+             
+            }
+            else if (User.IsInRole("Submitter"))
+            {
+                tickets = db.Tickets.Include(t => t.OwnerUser).ToList();
+               
+            }
+            return View(tickets);
         }
+
+  
 
         // GET: Tickets/Details/5
         [Authorize(Roles = "Admin,Project Manager,Submitter,Developer")]
@@ -48,6 +72,7 @@ namespace jmannionBugTracker.Controllers
             var roles = db.Roles.FirstOrDefault(r => r.Name == "Developer");
             var user = db.Users.Where(u => u.Roles.Any(r => r.RoleId == roles.Id));
             var currentUser = db.Users.Find(User.Identity.GetUserId());
+           
 
             var project = currentUser.Projects.ToList();
             ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName");
@@ -70,6 +95,11 @@ namespace jmannionBugTracker.Controllers
             if (ModelState.IsValid)
             {
                 ticket.Created = DateTime.Now;
+
+                
+                var currentUser = db.Users.Find(User.Identity.GetUserId());
+                ticket.OwnerUser = currentUser;
+                ticket.TicketStatusId = 1;
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -156,7 +186,69 @@ namespace jmannionBugTracker.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        // GET: Tickets/Assign
+        [Authorize(Roles = "Admin, ProjectManager")]
+        public ActionResult AssignTicket(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Ticket tickets = db.Tickets.Find(id);
+               if (tickets == null)
+            {
+                return HttpNotFound();
+            }
 
+            var roles = db.Roles.FirstOrDefault(r => r.Name == "Developer");
+            var user = db.Users.Where(u => u.Roles.Any(r => r.RoleId == roles.Id));
+          
+
+            ViewBag.AssignedToUserId = new SelectList(user, "Id", "FirstName",tickets.AssignedToUserId);
+            ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName",tickets.OwnerUserId);
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name",tickets.ProjectId);
+            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name",tickets.TicketPriorityId);
+            ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name",tickets.TicketStatusId);
+            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", tickets.TicketTypeId);
+            return View(tickets);
+        }
+
+        // POST: Tickets/Assign
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ProjectManager")]
+        public ActionResult AssignTicket([Bind(Include = "Id,Title,Created,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedToUserId")] Ticket ticket)
+        {
+            if (ModelState.IsValid)
+            {
+                ticket.Updated = DateTime.Now;
+                // db.Entry(ticket).State = EntityState.Modified;
+                
+                db.Entry(ticket).Property("TicketTypeId").IsModified = false;
+                db.Entry(ticket).Property("ProjectId").IsModified = false;
+                db.Entry(ticket).Property("TicketPriorityId").IsModified = false;
+                db.Entry(ticket).Property("TicketStatusId").IsModified = false;
+                db.Entry(ticket).Property("OwnerUserId").IsModified = false;
+                db.Entry(ticket).Property("AssignedToUserId").IsModified = true;
+                db.Entry(ticket).Property("Id").IsModified = false;
+                db.Entry(ticket).Property("Created").IsModified = false;
+                db.Entry(ticket).Property("Title").IsModified = false;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            //ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName", ticket.AssignedToUserId);
+            //ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", ticket.OwnerUserId);
+            //ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
+            //ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
+            //ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
+            //ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+            return View(ticket);
+        }
+
+       
         protected override void Dispose(bool disposing)
         {
             if (disposing)
