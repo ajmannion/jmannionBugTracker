@@ -20,28 +20,39 @@ namespace jmannionBugTracker.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.Find(userId);
+            var projects = helper.ListUserProjects(userId);
             var tickets = new List<Ticket>();
             if (User.IsInRole("Admin"))
             {
 
-              tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType).ToList();
+                return View(db.Tickets.ToList());
 
             }
 
             else if (User.IsInRole("Project Manager"))
             {
-               tickets= db.Tickets.Include(t => t.AssignedToUser).ToList();
-              
+                foreach (var p in projects)
+                {
+                    foreach (var t in p.Tickets)
+                    {
+                        tickets.Add(t);
+                    }
+                }
+                return View(tickets);
             }
             else if (User.IsInRole("Developer"))
             {
-               tickets = db.Tickets.Include(t => t.AssignedToUser).ToList();
-             
+
+                return View(db.Tickets.Where(t => t.AssignedToUserId == userId).ToList());
+
             }
             else if (User.IsInRole("Submitter"))
             {
-                tickets = db.Tickets.Include(t => t.OwnerUser).ToList();
-               
+
+                return View(db.Tickets.Where(t => t.OwnerUserId == userId).ToList());
+
             }
             return View(tickets);
         }
@@ -95,11 +106,10 @@ namespace jmannionBugTracker.Controllers
             if (ModelState.IsValid)
             {
                 ticket.Created = DateTime.Now;
-
-                
                 var currentUser = db.Users.Find(User.Identity.GetUserId());
                 ticket.OwnerUser = currentUser;
-                ticket.TicketStatusId = 1;
+                //ticket.TicketStatusId = 1;
+                ticket.TicketStatusId =db.TicketStatuses.FirstOrDefault(x => x.Name == "Unassigned").Id;
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -146,10 +156,24 @@ namespace jmannionBugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                ticket.Updated = DateTime.Now;
                 db.Entry(ticket).State = EntityState.Modified;
+                db.Tickets.Attach(ticket);
+                db.Entry(ticket).Property("TicketTypeId").IsModified = true;
+                db.Entry(ticket).Property("ProjectId").IsModified = false;
+                db.Entry(ticket).Property("TicketPriorityId").IsModified = true;
+                db.Entry(ticket).Property("TicketStatusId").IsModified = false;
+                db.Entry(ticket).Property("OwnerUserId").IsModified = false;
+                db.Entry(ticket).Property("AssignedToUserId").IsModified = false;
+                db.Entry(ticket).Property("Id").IsModified = false;
+                db.Entry(ticket).Property("Created").IsModified = false;
+                db.Entry(ticket).Property("Title").IsModified = false;
+                db.Entry(ticket).Property("Updated").IsModified = true;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+
             ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName", ticket.AssignedToUserId);
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", ticket.OwnerUserId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
@@ -224,12 +248,13 @@ namespace jmannionBugTracker.Controllers
             if (ModelState.IsValid)
             {
                 ticket.Updated = DateTime.Now;
+                ticket.TicketStatusId = db.TicketStatuses.FirstOrDefault(x => x.Name == "Assigned").Id;
                 // db.Entry(ticket).State = EntityState.Modified;
                 db.Tickets.Attach(ticket);
                 db.Entry(ticket).Property("TicketTypeId").IsModified = false;
                 db.Entry(ticket).Property("ProjectId").IsModified = false;
                 db.Entry(ticket).Property("TicketPriorityId").IsModified = false;
-                db.Entry(ticket).Property("TicketStatusId").IsModified = false;
+                db.Entry(ticket).Property("TicketStatusId").IsModified = true;
                 db.Entry(ticket).Property("OwnerUserId").IsModified = false;
                 db.Entry(ticket).Property("AssignedToUserId").IsModified = true;
                 db.Entry(ticket).Property("Id").IsModified = false;
@@ -238,13 +263,6 @@ namespace jmannionBugTracker.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            //ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName", ticket.AssignedToUserId);
-            //ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", ticket.OwnerUserId);
-            //ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
-            //ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            //ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
-            //ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
             return View(ticket);
         }
 

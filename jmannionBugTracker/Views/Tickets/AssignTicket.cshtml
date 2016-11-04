@@ -13,7 +13,7 @@
     @Html.HiddenFor(m=>m.ProjectId)*@
     <div class="form-horizontal">
         <h4>Ticket</h4>
-        <input type="hidden" name="Ticketstatus" value=1 />
+        @*<input type="hidden" name="Ticketstatus" value=1 />*@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -40,5 +40,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    <button class="btn-xs btn-default">
+        @Html.ActionLink("Back to List", "Index")
+        </button>
 </div>

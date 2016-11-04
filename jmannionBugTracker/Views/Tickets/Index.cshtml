@@ -14,22 +14,28 @@
         <thead>
             <tr>
         <th>
-            @Html.DisplayNameFor(model => model.AssignedToUser.FirstName)
+           @* @Html.DisplayNameFor(model => model.AssignedToUser.FirstName)*@
+            <p>Assigned User</p>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.OwnerUser.FirstName)
+            @*@Html.DisplayNameFor(model => model.OwnerUser.FirstName)*@
+            <p>Onwer</p>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Project.Name)
+           @* @Html.DisplayNameFor(model => model.Project.Name)*@
+            <p>Project Name</p>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TicketPriority.Name)
+           @* @Html.DisplayNameFor(model => model.TicketPriority.Name)*@
+            <p>Priority</p>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TicketStatus.Name)
+           @* @Html.DisplayNameFor(model => model.TicketStatus.Name)*@
+            <p>Status</p>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TicketType.Name)
+           @* @Html.DisplayNameFor(model => model.TicketType.Name)*@
+            <p>Ticket Type</p>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Title)
@@ -73,11 +79,19 @@
             @Html.DisplayFor(modelItem => item.Updated)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id }) |
-            @Html.ActionLink("Assign tickets", "AssignTicket", new { id = item.Id })
-        </td>
+            <button class="btn-xs btn-default">
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                </button> |
+            <button class="btn-xs btn-default">
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+                </button> |
+            <button class="btn-xs btn-default">
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) 
+                </button> |
+            <button class="btn-xs btn-default">
+                @Html.ActionLink("Assign tickets", "AssignTicket", new { id = item.Id })
+                </button>
+</td>
     </tr>
 }
 

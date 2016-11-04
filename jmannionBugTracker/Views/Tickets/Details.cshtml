@@ -91,6 +91,10 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    <button class="btn-xs btn-default">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+        </button> |
+    <button class="btn-xs btn-default">
+        @Html.ActionLink("Back to List", "Index")
+        </button>
 </p>
