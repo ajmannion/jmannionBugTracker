@@ -88,7 +88,7 @@ namespace jmannionBugTracker.Controllers
             var project = currentUser.Projects.ToList();
             ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName");
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName");
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
+            ViewBag.ProjectId = new SelectList(project, "Id", "Name");
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
             ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name");
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
@@ -125,7 +125,7 @@ namespace jmannionBugTracker.Controllers
         }
 
         // GET: Tickets/Edit/5
-        [Authorize(Roles = "Admin,Project Manager,Submitter,Developer")]
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -136,6 +136,7 @@ namespace jmannionBugTracker.Controllers
             if (ticket == null)
             {
                 return HttpNotFound();
+
             }
             ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName", ticket.AssignedToUserId);
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", ticket.OwnerUserId);
@@ -157,7 +158,7 @@ namespace jmannionBugTracker.Controllers
             if (ModelState.IsValid)
             {
                 ticket.Updated = DateTime.Now;
-                db.Entry(ticket).State = EntityState.Modified;
+               // db.Entry(ticket).State = EntityState.Modified;
                 db.Tickets.Attach(ticket);
                 db.Entry(ticket).Property("TicketTypeId").IsModified = true;
                 db.Entry(ticket).Property("ProjectId").IsModified = false;
@@ -197,6 +198,7 @@ namespace jmannionBugTracker.Controllers
                 return HttpNotFound();
             }
             return View(ticket);
+           
         }
 
         // POST: Tickets/Delete/5
@@ -211,7 +213,7 @@ namespace jmannionBugTracker.Controllers
             return RedirectToAction("Index");
         }
         // GET: Tickets/Assign
-        [Authorize(Roles = "Admin, ProjectManager")]
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult AssignTicket(int? id)
         {
             if (id == null)
@@ -242,7 +244,7 @@ namespace jmannionBugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, ProjectManager")]
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult AssignTicket([Bind(Include = "Id,Title,Created,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedToUserId")] Ticket ticket)
         {
             if (ModelState.IsValid)
