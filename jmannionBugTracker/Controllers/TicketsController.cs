@@ -213,7 +213,7 @@ namespace jmannionBugTracker.Controllers
             return RedirectToAction("Index");
         }
         // GET: Tickets/Assign
-        [Authorize(Roles = "Admin, Project Manager")]
+        [Authorize(Roles = "Admin,Project Manager")]
         public ActionResult AssignTicket(int? id)
         {
             if (id == null)
@@ -244,7 +244,7 @@ namespace jmannionBugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Project Manager")]
+        [Authorize(Roles = "Admin,Project Manager")]
         public ActionResult AssignTicket([Bind(Include = "Id,Title,Created,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedToUserId")] Ticket ticket)
         {
             if (ModelState.IsValid)
