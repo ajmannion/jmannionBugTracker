@@ -66,17 +66,16 @@ namespace jmannionBugTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "Id,TicketId,body,UpdatedDate,CreatedDate")] TicketComment ticketComment)
+        public ActionResult Create([Bind(Include = "Id,TicketId, UserId,body,UpdatedDate,CreatedDate")] int ticketId, TicketComment ticketComment)
         {
             if (ModelState.IsValid)
             {
                 ticketComment.UserId = db.Users.Find(User.Identity.GetUserId()).Id;
                 ticketComment.CreatedDate = DateTime.Now;
-                
+                ticketComment.TicketId = ticketId;       
                 db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
-                var currentId = db.Tickets.Find(ticketComment.Id);
-                return RedirectToAction("Index", "TicketComments", new {TicketId = currentId});
+                return RedirectToAction("Details", "Tickets", new {id = ticketComment.TicketId});
             }
 
             ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", ticketComment.TicketId);
@@ -111,6 +110,13 @@ namespace jmannionBugTracker.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(ticketComment).State = EntityState.Modified;
+                ticketComment.UpdatedDate = DateTime.Now;
+                db.TicketComments.Attach(ticketComment);
+                db.Entry(ticketComment).Property("TicketId").IsModified = true;
+                db.Entry(ticketComment).Property("Id").IsModified = false;
+                db.Entry(ticketComment).Property("CreatedDate").IsModified = false;
+                db.Entry(ticketComment).Property("UpdatedDate").IsModified = true;
+                db.Entry(ticketComment).Property("body").IsModified = true;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

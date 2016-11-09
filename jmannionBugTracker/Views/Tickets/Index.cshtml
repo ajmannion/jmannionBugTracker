@@ -91,13 +91,13 @@
             <button class="btn-xs btn-default">
                 @Html.ActionLink("Assign tickets", "AssignTicket", new { id = item.Id })
                 </button>
-            <div class="btn-group">
+            @*<div class="btn-group">
                 <button type="button" class="btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
                     Add a Comment<span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><button type="submit">@Html.ActionLink("View ", "Index", "TicketAttachments", new { ticketid = item.Id }, null)</button></li>
-                    <li><button type="submit">@Html.ActionLink("Create", "Create", "TicketAttachments", new { ticketid = item.Id }, null)</button></li>
+                    <li><button type="submit">@Html.ActionLink("View ", "Index", "TicketComments", new { ticketid = item.Id }, null)</button></li>
+                    <li><button type="submit">@Html.ActionLink("Create", "Create", "TicketComments", new { ticketid = item.Id }, null)</button></li>
                 </ul>
             </div>
             <div class="btn-group">
@@ -105,10 +105,10 @@
                      Add a Attachment<span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><button type="submit">@Html.ActionLink("View ", "Index", "TicketAttachments", new { ticketid = item.Id }, null)</button></li>
-                    <li><button type="submit">@Html.ActionLink("Create", "Create", "TicketAttachments", new { ticketid = item.Id }, null)</button></li>
+                    <li><button type="submit">@Html.ActionLink("View ", "Index", "TicketAttach", new { ticketid = item.Id }, null)</button></li>
+                    <li><button type="submit">@Html.ActionLink("Create", "Create", "TicketAttach", new { ticketid = item.Id }, null)</button></li>
                 </ul>
-            </div>
+            </div*@>
 </td>
     </tr>
 }
