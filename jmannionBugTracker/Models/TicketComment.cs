@@ -13,12 +13,12 @@ namespace jmannionBugTracker.Models
 
         public int TicketId { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         [AllowHtml]
         public string body { get; set; }
 
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
         public DateTime CreatedDate { get; set; }
 

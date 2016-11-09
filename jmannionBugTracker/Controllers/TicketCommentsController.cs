@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using jmannionBugTracker.Models;
+using Microsoft.AspNet.Identity;
 
 namespace jmannionBugTracker.Controllers
 {
@@ -15,13 +16,28 @@ namespace jmannionBugTracker.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: TicketComments
-        public ActionResult Index()
+        [Authorize]
+        public ActionResult Index(int? TicketId)
         {
-            var ticketComments = db.TicketComments.Include(t => t.Ticket);
-            return View(ticketComments.ToList());
+            if (User.IsInRole("Admin"))
+            {
+                var ticketComments = db.TicketComments.OrderBy( o => o.TicketId).ToList();
+                return View(ticketComments);
+            }
+            else
+            {
+                int? tid = TicketId;
+                var ticketComments = db.TicketComments.Where(t => t.TicketId == tid).ToList();
+                return View(ticketComments);
+            }
+            
         }
+    
+
+
 
         // GET: TicketComments/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -40,6 +56,7 @@ namespace jmannionBugTracker.Controllers
         public ActionResult Create()
         {
             ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title");
+            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
             return View();
         }
 
@@ -48,13 +65,18 @@ namespace jmannionBugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,TicketId,UserId,body,UpdatedDate,CreatedDate")] TicketComment ticketComment)
+        [Authorize]
+        public ActionResult Create([Bind(Include = "Id,TicketId,body,UpdatedDate,CreatedDate")] TicketComment ticketComment)
         {
             if (ModelState.IsValid)
             {
+                ticketComment.UserId = db.Users.Find(User.Identity.GetUserId()).Id;
+                ticketComment.CreatedDate = DateTime.Now;
+                
                 db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                var currentId = db.Tickets.Find(ticketComment.Id);
+                return RedirectToAction("Index", "TicketComments", new {TicketId = currentId});
             }
 
             ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", ticketComment.TicketId);
@@ -62,6 +84,7 @@ namespace jmannionBugTracker.Controllers
         }
 
         // GET: TicketComments/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -82,6 +105,7 @@ namespace jmannionBugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "Id,TicketId,UserId,body,UpdatedDate,CreatedDate")] TicketComment ticketComment)
         {
             if (ModelState.IsValid)
@@ -95,6 +119,7 @@ namespace jmannionBugTracker.Controllers
         }
 
         // GET: TicketComments/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -112,6 +137,7 @@ namespace jmannionBugTracker.Controllers
         // POST: TicketComments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             TicketComment ticketComment = db.TicketComments.Find(id);
