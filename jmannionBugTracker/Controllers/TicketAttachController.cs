@@ -7,13 +7,13 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using jmannionBugTracker.Models;
+using System.IO;
 
 namespace jmannionBugTracker.Controllers
 {
     public class TicketAttachController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-      
 
         // GET: TicketAttach
         public ActionResult Index()
@@ -50,14 +50,27 @@ namespace jmannionBugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,TicketId,FilePath,FileUrl,Description,CreatedDate,UserId")] TicketAttach ticketAttach)
+        public ActionResult Create([Bind(Include = "Id,TicketId,FilePath,Description,CreatedDate,UserId")] TicketAttach ticketAttach, HttpPostedFileBase FileUrl, string description)
         {
             if (ModelState.IsValid)
             {
+
+                if (FileUploadValidator.IsWebFriendlyFile(FileUrl))
+                { 
+                    var fileName = Path.GetFileName(FileUrl.FileName);
+                    FileUrl.SaveAs(Path.Combine(Server.MapPath("~/Uploads"), fileName));
+                    ticketAttach.FileUrl = "~/Uploads/" + fileName;
+
+                }
+
+
+             
+                ticketAttach.CreatedDate = DateTime.Now;
+                ticketAttach.Description = description;
                 db.TicketAttachs.Add(ticketAttach);
                 db.SaveChanges();
                 return RedirectToAction("Index");
-            }
+         }
 
             ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", ticketAttach.TicketId);
             ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", ticketAttach.UserId);

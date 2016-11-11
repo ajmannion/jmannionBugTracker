@@ -112,13 +112,13 @@ namespace jmannionBugTracker.Controllers
                 db.Entry(ticketComment).State = EntityState.Modified;
                 ticketComment.UpdatedDate = DateTime.Now;
                 db.TicketComments.Attach(ticketComment);
-                db.Entry(ticketComment).Property("TicketId").IsModified = true;
+                db.Entry(ticketComment).Property("TicketId").IsModified = false;
                 db.Entry(ticketComment).Property("Id").IsModified = false;
                 db.Entry(ticketComment).Property("CreatedDate").IsModified = false;
                 db.Entry(ticketComment).Property("UpdatedDate").IsModified = true;
                 db.Entry(ticketComment).Property("body").IsModified = true;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "TicketsComments" , new { id = ticketComment.TicketId });
             }
             ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", ticketComment.TicketId);
             return View(ticketComment);
