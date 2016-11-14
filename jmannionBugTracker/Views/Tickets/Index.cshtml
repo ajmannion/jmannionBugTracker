@@ -5,11 +5,11 @@
 }
 
 <h2> Ticket Index</h2>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.9/css/jquery.min.dataTables.css" />
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+<table class="table" id="maintable">
     
         <thead>
             <tr>
@@ -46,7 +46,7 @@
         <th>
             @Html.DisplayNameFor(model => model.Updated)
         </th>
-        <th></th>
+       <th></th>
     </tr>
     </thead>
 @foreach (var item in Model) {
@@ -90,7 +90,10 @@
                 </button> |
             <button class="btn-xs btn-default">
                 @Html.ActionLink("Assign tickets", "AssignTicket", new { id = item.Id })
-                </button>
+                </button> |
+            <button class="btn-xs btn-default">
+               <a href="@Url.Action("Index", "TicketHistories", new { id = item.Id })">Ticket Histories</a>
+            </button> 
             @*<div class="btn-group">
                 <button type="button" class="btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
                     Add a Comment<span class="caret"></span>
@@ -108,7 +111,7 @@
                     <li><button type="submit">@Html.ActionLink("View ", "Index", "TicketAttach", new { ticketid = item.Id }, null)</button></li>
                     <li><button type="submit">@Html.ActionLink("Create", "Create", "TicketAttach", new { ticketid = item.Id }, null)</button></li>
                 </ul>
-            </div*@>
+            </div>*@
 </td>
     </tr>
 }
@@ -120,7 +123,7 @@
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
 
     <script>
-           $('.table').DataTable();
+           $('#maintable').dataTable();
     </script>
     <script>
        $(document).ready(function () {

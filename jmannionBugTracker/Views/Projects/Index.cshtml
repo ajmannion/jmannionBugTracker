@@ -9,7 +9,7 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+<table class="table" id="maintable">
     <thead>
     <tr>
         <th>
@@ -66,7 +66,7 @@
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
 
     <script>
-           $('.table').DataTable();
+           $('#maintable').dataTable();
     </script>
     <script>
        $(document).ready(function () {
