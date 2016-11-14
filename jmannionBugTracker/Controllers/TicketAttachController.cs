@@ -69,7 +69,7 @@ namespace jmannionBugTracker.Controllers
                 ticketAttach.Description = description;
                 db.TicketAttachs.Add(ticketAttach);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Tickets", new { id = ticketAttach.TicketId });
          }
 
             ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", ticketAttach.TicketId);
@@ -105,7 +105,7 @@ namespace jmannionBugTracker.Controllers
             {
                 db.Entry(ticketAttach).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Detail", "Tickets", new { id = ticketAttach.TicketId });
             }
             ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", ticketAttach.TicketId);
             ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", ticketAttach.UserId);
@@ -135,7 +135,7 @@ namespace jmannionBugTracker.Controllers
             TicketAttach ticketAttach = db.TicketAttachs.Find(id);
             db.TicketAttachs.Remove(ticketAttach);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Tickets", new { id = ticketAttach.TicketId });
         }
 
         protected override void Dispose(bool disposing)

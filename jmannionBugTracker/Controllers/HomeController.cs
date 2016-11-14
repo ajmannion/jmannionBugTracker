@@ -26,5 +26,20 @@ namespace jmannionBugTracker.Controllers
 
             return View();
         }
+
+        public ActionResult Dashboard()
+        {
+            ViewBag.Message = "BugTracker Dashboard";
+
+            return View();
+        }
+        public ActionResult widgets()
+        {
+            ViewBag.Message = "BugTracker Widgets";
+
+            return View();
+        }
+
+
     }
 }
