@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using jmannionBugTracker.Models;
 using Microsoft.AspNet.Identity;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace jmannionBugTracker.Controllers
 {
@@ -153,28 +155,87 @@ namespace jmannionBugTracker.Controllers
         [Authorize(Roles = "Admin,Project Manager,Submitter,Developer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedToUserId")] Ticket ticket)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedToUserId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
+
+                HistoryHelper historyHelper = new HistoryHelper();
+
+                StringBuilder updateMessage = new StringBuilder();
+
+                var oldTicketInfo = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
+
+                if ( oldTicketInfo.Title != ticket.Title)
+                {
+                    historyHelper.AddHistory(ticket.Id, "Title", oldTicketInfo.Title, ticket.Title, User.Identity.GetUserId());
+                    updateMessage.AppendFormat("Ticket Title: {0}, ", ticket.Title);
+                }
+                if (oldTicketInfo.TicketTypeId!= ticket.TicketTypeId)
+                {
+                    var oldTicketType = db.TicketTypes.Find(oldTicketInfo.TicketTypeId).Name;
+                    var newTicketType = db.TicketTypes.Find(ticket.TicketTypeId).Name;
+                    historyHelper.AddHistory(ticket.Id, "Ticket Type", oldTicketType, newTicketType, User.Identity.GetUserId());
+                    updateMessage.AppendFormat("Ticket Type: {0}, ", ticket.TicketTypeId);
+                }
+                if (oldTicketInfo.TicketPriorityId != ticket.TicketPriorityId)
+                {
+                    var oldTicketPriority = db.TicketPriorities.Find(oldTicketInfo.TicketPriorityId).Name;
+                    var newTicketPriority = db.TicketPriorities.Find(ticket.TicketPriorityId).Name;
+                    historyHelper.AddHistory(ticket.Id, "Ticket Type", oldTicketPriority, newTicketPriority, User.Identity.GetUserId());
+                    updateMessage.AppendFormat("Ticket Status: {0}, ", ticket.TicketTypeId);
+                }
+                //if (oldTicketInfo.AssignedToUserId != ticket.AssignedToUserId && oldTicketInfo.AssignedToUser !=null)
+                //{
+                //    var oldAssignedUser = db.Users.Find(oldTicketInfo.AssignedToUserId).LastName;
+                //    var newAssignedUser = db.Users.Find(ticket.AssignedToUserId).LastName;
+                //    historyHelper.AddHistory(ticket.Id, "Assigned User", oldAssignedUser, newAssignedUser, User.Identity.GetUserId());
+                //    updateMessage.AppendFormat("Assigned User: {0}, ", ticket.TicketTypeId);
+                //}
+                //if (oldTicketInfo.AssignedToUserId == null && oldTicketInfo.AssignedToUser != null)
+                //{
+                //    var oldAssignedUser = "UnAssigned";
+                //    var newAssignedUser = db.Users.Find(ticket.AssignedToUserId).FirstName + " " + db.Users.Find(ticket.AssignedToUserId).LastName;
+                //    historyHelper.AddHistory(ticket.Id, "Assigned User", oldAssignedUser, newAssignedUser, User.Identity.GetUserId());
+                //    updateMessage.AppendFormat("Assigned User: {0}, ", ticket.TicketTypeId);
+                //}
+
+
                 ticket.Updated = DateTime.Now;
-               // db.Entry(ticket).State = EntityState.Modified;
-                db.Tickets.Attach(ticket);
-                db.Entry(ticket).Property("TicketTypeId").IsModified = true;
-                db.Entry(ticket).Property("ProjectId").IsModified = false;
-                db.Entry(ticket).Property("TicketPriorityId").IsModified = true;
-                db.Entry(ticket).Property("TicketStatusId").IsModified = false;
-                db.Entry(ticket).Property("OwnerUserId").IsModified = false;
-                db.Entry(ticket).Property("AssignedToUserId").IsModified = false;
-                db.Entry(ticket).Property("Id").IsModified = false;
-                db.Entry(ticket).Property("Created").IsModified = false;
-                db.Entry(ticket).Property("Title").IsModified = false;
-                db.Entry(ticket).Property("Updated").IsModified = true;
                 db.SaveChanges();
+                // Add Notifcations 
+
+                var developer = db.Users.Find(ticket.AssignedToUserId);
+                if (developer != null && developer.Email != null)
+                {
+                    var svc = new EmailService();
+                    var msg = new IdentityMessage();
+                    msg.Destination = developer.Email;
+                    msg.Subject = " Aj Bug Tracker Update:" + ticket.Title;
+                    msg.Body = ("The following items have been updated  the :" + ticket.Title + updateMessage);
+                    await svc.SendAsync(msg);
+
+                }
+
+                //// db.Entry(ticket).State = EntityState.Modified;
+                // db.Tickets.Attach(ticket);
+                // db.Entry(ticket).Property("TicketTypeId").IsModified = true;
+                // db.Entry(ticket).Property("ProjectId").IsModified = false;
+                // db.Entry(ticket).Property("TicketPriorityId").IsModified = true;
+                // db.Entry(ticket).Property("TicketStatusId").IsModified = false;
+                // db.Entry(ticket).Property("OwnerUserId").IsModified = false;
+                // db.Entry(ticket).Property("AssignedToUserId").IsModified = false;
+                // db.Entry(ticket).Property("Id").IsModified = false;
+                // db.Entry(ticket).Property("Created").IsModified = false;
+                // db.Entry(ticket).Property("Title").IsModified = false;
+                // db.Entry(ticket).Property("Updated").IsModified = true;
+              
+
+
+
                 return RedirectToAction("Index");
             }
-
-
+         
             ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName", ticket.AssignedToUserId);
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", ticket.OwnerUserId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);

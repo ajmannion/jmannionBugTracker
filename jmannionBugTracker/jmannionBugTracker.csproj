@@ -230,6 +230,7 @@
     <Compile Include="Models\AdminUserViewModel.cs" />
     <Compile Include="Models\AssgnToProjectVM.cs" />
     <Compile Include="Models\FileUploadValidator.cs" />
+    <Compile Include="Models\HistoryHelper.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Project.cs" />

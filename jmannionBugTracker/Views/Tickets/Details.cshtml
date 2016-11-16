@@ -4,220 +4,460 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Ticket</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            <p>Assigned To User</p>
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.AssignedToUser.FirstName)    
-        </dd>
-
-        <dt>
-            <p>Ticket Owner</p>
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.OwnerUser.FirstName)
-        </dd>
-
-        <dt>
-            <p>Project Name</p>
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TicketPriority.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.TicketPriority.Name)
-        </dd>
-
-        <dt>
-            <p> Ticket Status</p>
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.TicketStatus.Name)
-        </dd>
-
-        <dt>
-            <p>Ticket Type</p>
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.TicketType.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Updated)
-        </dd>
-    </dl>
-</div>
-<hr />
+<h2> Ticket Details</h2>
 <div class="container">
-    <h2>Tickets Comments</h2>
+<div class="col-md-8">
+    <div class="panel panel-default">
+        <div class="panel-body tabs">
 
-@if (Model.TicketComments.Count == 0)
-{
-        <h4 class="bg-primary">No Comments</h4>
-}
- @foreach (var comment1 in Model.TicketComments.OrderByDescending(c=> c.CreatedDate).Take(3))
- {
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="post-preview">
-                        <div class="row">
-                            <p>@Html.DisplayFor(c => comment1.body)</p>
-                            <p> Comment Created on @Html.DisplayFor(c => comment1.CreatedDate) By: @Html.DisplayFor(b => comment1.User.FirstName) </p>                        
+            <ul class="nav nav-pills">
+                <li class="active"><a href="#pilltab1" data-toggle="tab">Ticket Details</a></li>
+                <li><a href="#pilltab2" data-toggle="tab">Ticket Comments</a></li>
+                <li><a href="#pilltab3" data-toggle="tab">Ticket Attachments</a></li>
+                <li><a href="#pilltab4" data-toggle="tab"> Ticket Change History</a></li>
+
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="pilltab1">
+                    <h4>Ticket Details</h4>
+                    <div>
+                        <hr />
+                        <dl class="dl-horizontal">
+                            <dt>
+                                <p>Assigned To User</p>
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.AssignedToUser.FirstName)
+                            </dd>
+
+                            <dt>
+                                <p>Ticket Owner</p>
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.OwnerUser.FirstName)
+                            </dd>
+
+                            <dt>
+                                <p>Project Name</p>
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Project.Name)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.TicketPriority.Name)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.TicketPriority.Name)
+                            </dd>
+
+                            <dt>
+                                <p> Ticket Status</p>
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.TicketStatus.Name)
+                            </dd>
+
+                            <dt>
+                                <p>Ticket Type</p>
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.TicketType.Name)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Title)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Title)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Created)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Updated)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Updated)
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pilltab2">
+                    <h4>Commments for Tickets</h4>
+                    <div class="container">
+                        <h2>Tickets Comments</h2>
+
+                        @if (Model.TicketComments.Count == 0)
+                    {
+                            <h4 class="bg-primary">No Comments</h4>
+                              }
+                        @foreach (var comment1 in Model.TicketComments.OrderByDescending(c => c.CreatedDate).Take(3))
+                                 {
+                            <div class="row">
+                                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                                    <div class="post-preview">
+                                        <div class="row">
+                                            <p>@Html.DisplayFor(c => comment1.body)</p>
+                                            <p> Comment Created on @Html.DisplayFor(c => comment1.CreatedDate) By: @Html.DisplayFor(b => comment1.User.FirstName) </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.Identity.GetUserId() == (comment1.UserId))
+                                    {
+                                        <button class="btn-xs btn-default">
+                                            <a href="@(Url.Action("Edit", "TicketComments", new { id = comment1.Id }))">Edit a comment</a>
+                                        </button>
+                                        <span><small>  || </small></span>
+                                        <button class="btn-xs btn-default">
+                                            <a href="@(Url.Action("Delete", "TicketComments", new { id = comment1.Id }))">Delete A Comment</a>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+
+
+                        }
+
+                        <hr />
+           <div class="container">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+
+                                using (Html.BeginForm("Create", "TicketComments", new { ticketId = Model.Id }, FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    {
+                                    
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <h2>Please leave a comment...</h2>
+                                            </div>
+                                        </div>
+                                        <div class="form-horizontal">
+                                            <div class="form-group" width="100px">
+                                                <div class="container">
+                                                <textarea class="form-control" id="comment" name="body" rows="6" style="width:auto"></textarea>
+                                                    </div>
+                                                 </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="submit a comment" class="btn-xs btn-default" />
+                                            </div>
+                                        </div>
+                                    
+
+                                    }
+                                }
+
+                            }
+
+
+                            else
+                            {
+                              <p> Please Login to Comment on the Blog Post </p >
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pilltab3">
+                    <h3>Attachments for Tickets</h3>
+                    <div class="container">
+                        <h4> Add an Attachment to this Ticket</h4>
+                        @if (Model.TicketAttachs.Count == 0)
+            {
+                            <h4 class="bg-primary">No Attachments for this Ticket</h4>
+                        }
+                        @foreach (var attach1 in Model.TicketAttachs.OrderByDescending(c => c.CreatedDate).Take(5))
+            {
+                            <div class="row">
+                                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                                    <div class="post-preview">
+                                        <div class="row">
+                                            <p>"@Html.DisplayFor(c => attach1.FileUrl)</p>
+                                            <p> Comment Created on @Html.DisplayFor(c => attach1.CreatedDate) By: @Html.DisplayFor(b => attach1.User.FirstName) </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.Identity.GetUserId() == (attach1.UserId))
+                {
+                                        <button class="btn-xs btn-default">
+                                            <a href="@(Url.Action("Delete", "TicketAttach", new { id = attach1.Id }))">Delete A Attachment</a>
+                                        </button>
+                                        <button class="btn-xs btn-default">
+                                            <a href="@(Url.Action("Edit", "TicketAttach", new { id = attach1.Id }))">Edit A Attachment</a>
+                                        </button>
+                                        <button class="btn-xs btn-default">
+                                            <a href="@Url.Content(attach1.FileUrl)" target="_blank">View Document</a>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+
+
+                        }
+                    </div>
+                    @using (Html.BeginForm("Create", "TicketAttach", new { ticketId = Model.Id }, FormMethod.Post, new { enctype = "Multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            <p> Attachment Description</p>
+                            <div class="col-md-10">
+                                <input name="description" type="text" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @*@Html.EditorFor(model => model.FileUrl, new { htmlAttributes = new { @class = "form-control" } })*@
+                                <input name="FileUrl" type="file" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-1 col-md-10">
+                                <input type="submit" value="Create" class="btn-md btn-default" />
+                            </div>
+                        </div>
+                    }   
+                    <div class="tab-pane fade" id="pilltab3">
+                        <h4>Tab 3</h4>
+                       //todo: add histories
+                        @*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget rutrum purus. Donec hendrerit ante ac metus sagittis elementum. Mauris feugiat nisl sit amet neque luctus, a tincidunt odio auctor. </p>*@
+                    </div>
+                     
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+        <div>
+            <h4>Ticket</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    <p>Assigned To User</p>
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.AssignedToUser.FirstName)
+                </dd>
+
+                <dt>
+                    <p>Ticket Owner</p>
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.OwnerUser.FirstName)
+                </dd>
+
+                <dt>
+                    <p>Project Name</p>
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.TicketPriority.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.TicketPriority.Name)
+                </dd>
+
+                <dt>
+                    <p> Ticket Status</p>
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.TicketStatus.Name)
+                </dd>
+
+                <dt>
+                    <p>Ticket Type</p>
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.TicketType.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Title)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Title)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Created)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Created)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Updated)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Updated)
+                </dd>
+            </dl>
+        </div>
+        <hr />
+        <div class="container">
+            <h2>Tickets Comments</h2>
+
+            @if (Model.TicketComments.Count == 0)
+            {
+                <h4 class="bg-primary">No Comments</h4>
+            }
+            @foreach (var comment1 in Model.TicketComments.OrderByDescending(c => c.CreatedDate).Take(3))
+            {
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                        <div class="post-preview">
+                            <div class="row">
+                                <p>@Html.DisplayFor(c => comment1.body)</p>
+                                <p> Comment Created on @Html.DisplayFor(c => comment1.CreatedDate) By: @Html.DisplayFor(b => comment1.User.FirstName) </p>
+                            </div>
                         </div>
                     </div>
-               </div>
-            </div>
+                </div>
 
-            <div class="row">
-                <div class="col-sm-12">
-                   @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.Identity.GetUserId() == (comment1.UserId))
-                   {
-                    <button class="btn-xs btn-default">
-                        <a href="@(Url.Action("Edit", "TicketComments", new { id = comment1.Id }))">Edit a comment</a>
-                        </button>
-                        <span><small>  || </small></span>
-                        <button class="btn-xs btn-default">
-                            <a href="@(Url.Action("Delete", "TicketComments", new { id = comment1.Id }))">Delete A Comment</a>
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.Identity.GetUserId() == (comment1.UserId))
+                        {
+                            <button class="btn-xs btn-default">
+                                <a href="@(Url.Action("Edit", "TicketComments", new { id = comment1.Id }))">Edit a comment</a>
                             </button>
-                            }
-</div>
-            </div>
-
-
- }
-    
-            <hr />
-  <div class="container">
- @if (User.Identity.IsAuthenticated)
-                           {
-
-                               using (Html.BeginForm("Create", "TicketComments", new { ticketId = Model.Id }, FormMethod.Post))
-                               {
-                                   @Html.AntiForgeryToken()
-                                   {
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Please leave a comment...</h2>
-                </div>
-            </div>
-         <div class="form-horizontal">
-                <div class="form-group">
-                    <textarea class="form-control" id="comment" name="body" rows="6"></textarea>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="submit a comment" class="btn-xs btn-default" />
-                </div>
-            </div>
-         }
-                   }
-
- }
-
-
- else
- {
-     < p > Please Login to Comment on the Blog Post </ p >
- }
-            </div >
-
-
- }
-    </div>
-
-<div class="container">
-    <h2> Add an Attachment to the Ticket</h2>
-    @if (Model.TicketAttachs.Count == 0)
-    {
-        <h4 class="bg-primary">No Attachments for this Ticket</h4>
-    }
-    @foreach (var attach1 in Model.TicketAttachs.OrderByDescending(c => c.CreatedDate).Take(5))
-    { 
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-preview">
-                    <div class="row">
-                         <p>"@Html.DisplayFor(c => attach1.FileUrl)</p>
-                        <p> Comment Created on @Html.DisplayFor(c => attach1.CreatedDate) By: @Html.DisplayFor(b => attach1.User.FirstName) </p>
+                            <span><small>  || </small></span>
+                            <button class="btn-xs btn-default">
+                                <a href="@(Url.Action("Delete", "TicketComments", new { id = comment1.Id }))">Delete A Comment</a>
+                            </button>
+                        }
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.Identity.GetUserId() == (attach1.UserId))
+
+
+            }
+
+            <hr />
+            <div class="container">
+                @if (User.Identity.IsAuthenticated)
                 {
-                    <button class="btn-xs btn-default">
-                        <a href="@(Url.Action("Delete", "TicketAttach", new { id = attach1.Id }))">Delete A Comment</a>
-                    </button>
-                    <button class="btn-xs btn-default">
-                        <a href="@(Url.Action("Edit", "TicketAttach", new { id = attach1.Id }))">Edit A Comment</a>
-                    </button>
-                    <button class="btn-xs btn-default">
-                        <a href="@Url.Content(attach1.FileUrl)" target="_blank">View Document</a>
-                    </button>
+
+                    using (Html.BeginForm("Create", "TicketComments", new { ticketId = Model.Id }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        {
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h2>Please leave a comment...</h2>
+                                </div>
+                            </div>
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <textarea class="form-control" id="comment" name="body" rows="6"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="submit a comment" class="btn-xs btn-default" />
+                                </div>
+                            </div>
+                        }
+                    }
+
+                }
+
+
+                else
+                {
+     < p > Please Login to Comment on the Blog Post </ p >
                 }
             </div>
+
+
+            }
         </div>
 
+        <div class="container">
+            <h2> Add an Attachment to the Ticket</h2>
+            @if (Model.TicketAttachs.Count == 0)
+            {
+                <h4 class="bg-primary">No Attachments for this Ticket</h4>
+            }
+            @foreach (var attach1 in Model.TicketAttachs.OrderByDescending(c => c.CreatedDate).Take(5))
+            {
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                        <div class="post-preview">
+                            <div class="row">
+                                <p>"@Html.DisplayFor(c => attach1.FileUrl)</p>
+                                <p> Comment Created on @Html.DisplayFor(c => attach1.CreatedDate) By: @Html.DisplayFor(b => attach1.User.FirstName) </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.Identity.GetUserId() == (attach1.UserId))
+                {
+                            <button class="btn-xs btn-default">
+                                <a href="@(Url.Action("Delete", "TicketAttach", new { id = attach1.Id }))">Delete A Comment</a>
+                            </button>
+                            <button class="btn-xs btn-default">
+                                <a href="@(Url.Action("Edit", "TicketAttach", new { id = attach1.Id }))">Edit A Comment</a>
+                            </button>
+                            <button class="btn-xs btn-default">
+                                <a href="@Url.Content(attach1.FileUrl)" target="_blank">View Document</a>
+                            </button>
+                        }
+                    </div>
+                </div>
 
-    }
-</div>
-    @using (Html.BeginForm("Create", "TicketAttach", new { ticketId = Model.Id }, FormMethod.Post, new { enctype = "Multipart/form-data" }))
-    {
-        @Html.AntiForgeryToken()
 
-<div class="form-group">
-<p>Description</p>
-    <div class="col-md-10">
-        <input name="description" type="text" class="form-control"/>
-    </div>
-</div>
+            }
+        </div>
+        @using (Html.BeginForm("Create", "TicketAttach", new { ticketId = Model.Id }, FormMethod.Post, new { enctype = "Multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
 
-<div class="form-group">
-    <div class="col-md-10">
-        @*@Html.EditorFor(model => model.FileUrl, new { htmlAttributes = new { @class = "form-control" } })*@
-        <input name="FileUrl" type="file" class="form-control"/>
-      </div>
-</div>
-<div class="form-group">
-    <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="Create" class="btn-xs btn-default" />
-    </div>
-</div>
-    }
-<p>
-    @*<button class="btn-xs btn-default">
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
-        </button> |*@
-    <button class="btn-xs btn-default">
-        @Html.ActionLink("Back to List", "Index")
-        </button>
-   
-</p>
+            <div class="form-group">
+                <p>Description</p>
+                <div class="col-md-10">
+                    <input name="description" type="text" class="form-control" />
+                </div>
+            </div>
+
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @*@Html.EditorFor(model => model.FileUrl, new { htmlAttributes = new { @class = "form-control" } })*@
+                            <input name="FileUrl" type="file" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn-xs btn-default" />
+                        </div>
+                    </div>
+        }
+        <p>
+            @*<button class="btn-xs btn-default">
+                @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+                </button> |*@
+            <button class="btn-xs btn-default">
+                @Html.ActionLink("Back to List", "Index")
+            </button>
+
+        </p>
