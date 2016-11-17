@@ -260,6 +260,7 @@
     <Content Include="css\datepicker.css" />
     <Content Include="css\datepicker3.css" />
     <Content Include="css\styles.css" />
+    <Content Include="css\StyleSheet1.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="forms.html" />
@@ -267,6 +268,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="icons.html" />
     <None Include="Views\Home\Dashboard.cshtml" />
+    <Content Include="Images\bugtracker.jpg" />
     <Content Include="js\bootstrap-datepicker.js" />
     <Content Include="js\bootstrap-table.js" />
     <Content Include="js\bootstrap.js" />

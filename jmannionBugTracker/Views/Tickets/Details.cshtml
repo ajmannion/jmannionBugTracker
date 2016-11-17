@@ -6,7 +6,7 @@
 
 <h2> Ticket Details</h2>
 <div class="container">
-<div class="col-md-8">
+<div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-body tabs">
 
@@ -92,8 +92,7 @@
                 <div class="tab-pane fade" id="pilltab2">
                     <h4>Commments for Tickets</h4>
                     <div class="container">
-                        <h2>Tickets Comments</h2>
-
+                        <hr />
                         @if (Model.TicketComments.Count == 0)
                     {
                             <h4 class="bg-primary">No Comments</h4>
@@ -172,6 +171,7 @@
                 </div>
                 <div class="tab-pane fade" id="pilltab3">
                     <h3>Attachments for Tickets</h3>
+                    <hr />
                     <div class="container">
                         <h4> Add an Attachment to this Ticket</h4>
                         @if (Model.TicketAttachs.Count == 0)
@@ -233,18 +233,85 @@
                             </div>
                         </div>
                     }   
-                    <div class="tab-pane fade" id="pilltab3">
-                        <h4>Tab 3</h4>
-                       //todo: add histories
-                        @*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget rutrum purus. Donec hendrerit ante ac metus sagittis elementum. Mauris feugiat nisl sit amet neque luctus, a tincidunt odio auctor. </p>*@
                     </div>
-                     
+                    <div class="tab-pane fade" id="pilltab4">
+                        <hr />
+                       <div class="container">                      
+                            <div>                      
+        <div class="row">
+            <div class="col-lg- 12 col-sm-8">
+                <div class="post-preview">
+                    <div class="row">
+                        <table class="table" id="maintable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.TicketHistories.Title)*@
+                                        <p>Title</p>
+                                    </th>
+                                    <th>
+                                        @*@Html.DisplayNameFor(ModelItem => model.User.FirstName)*@
+                                        <p>First Name</p>
+                                    </th>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => history1.Property)*@
+                                        <p> Property</p>
+                                    </th>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => history1.OldValue)*@
+                                        <p>Old value</p>
+                                    </th>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => history1.NewValue)*@
+                                        <p> New Value</p>
+                                    </th>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => history1.Changed)*@
+                                        <p>Chqnged</p>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in Model.TicketHistories)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Ticket.Title)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.User.FirstName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Property)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OldValue)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NewValue)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Changed)
+                                    </td>
+                                   
+                                </tr>
+                            }
+
+                        </table> 
+                    </div>
                 </div>
+            </div>
+        </div>
+                         }
+                    
+                        </div>
+                    </div>
+               
             </div>
         </div>
     </div>
 </div>
-</div>
+
 
         <div>
             <h4>Ticket</h4>

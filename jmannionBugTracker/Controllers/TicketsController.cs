@@ -185,22 +185,7 @@ namespace jmannionBugTracker.Controllers
                     historyHelper.AddHistory(ticket.Id, "Ticket Type", oldTicketPriority, newTicketPriority, User.Identity.GetUserId());
                     updateMessage.AppendFormat("Ticket Status: {0}, ", ticket.TicketTypeId);
                 }
-                //if (oldTicketInfo.AssignedToUserId != ticket.AssignedToUserId && oldTicketInfo.AssignedToUser !=null)
-                //{
-                //    var oldAssignedUser = db.Users.Find(oldTicketInfo.AssignedToUserId).LastName;
-                //    var newAssignedUser = db.Users.Find(ticket.AssignedToUserId).LastName;
-                //    historyHelper.AddHistory(ticket.Id, "Assigned User", oldAssignedUser, newAssignedUser, User.Identity.GetUserId());
-                //    updateMessage.AppendFormat("Assigned User: {0}, ", ticket.TicketTypeId);
-                //}
-                //if (oldTicketInfo.AssignedToUserId == null && oldTicketInfo.AssignedToUser != null)
-                //{
-                //    var oldAssignedUser = "UnAssigned";
-                //    var newAssignedUser = db.Users.Find(ticket.AssignedToUserId).FirstName + " " + db.Users.Find(ticket.AssignedToUserId).LastName;
-                //    historyHelper.AddHistory(ticket.Id, "Assigned User", oldAssignedUser, newAssignedUser, User.Identity.GetUserId());
-                //    updateMessage.AppendFormat("Assigned User: {0}, ", ticket.TicketTypeId);
-                //}
-
-
+               
                 ticket.Updated = DateTime.Now;
                 db.SaveChanges();
                 // Add Notifcations 
@@ -216,22 +201,6 @@ namespace jmannionBugTracker.Controllers
                     await svc.SendAsync(msg);
 
                 }
-
-                //// db.Entry(ticket).State = EntityState.Modified;
-                // db.Tickets.Attach(ticket);
-                // db.Entry(ticket).Property("TicketTypeId").IsModified = true;
-                // db.Entry(ticket).Property("ProjectId").IsModified = false;
-                // db.Entry(ticket).Property("TicketPriorityId").IsModified = true;
-                // db.Entry(ticket).Property("TicketStatusId").IsModified = false;
-                // db.Entry(ticket).Property("OwnerUserId").IsModified = false;
-                // db.Entry(ticket).Property("AssignedToUserId").IsModified = false;
-                // db.Entry(ticket).Property("Id").IsModified = false;
-                // db.Entry(ticket).Property("Created").IsModified = false;
-                // db.Entry(ticket).Property("Title").IsModified = false;
-                // db.Entry(ticket).Property("Updated").IsModified = true;
-              
-
-
 
                 return RedirectToAction("Index");
             }

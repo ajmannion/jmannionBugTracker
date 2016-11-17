@@ -1,0 +1,14 @@
+﻿body {
+}
+
+.p1{
+   float: left;
+   /*padding: 0 0 0 75px;*/
+   /* width: 33%; height: auto;*/
+    min-width: 150px;
+   /*float: left;*/
+   margin-right:1rem; 
+  
+ 
+
+}
