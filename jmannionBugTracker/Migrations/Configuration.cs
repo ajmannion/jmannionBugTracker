@@ -78,6 +78,59 @@ namespace jmannionBugTracker.Migrations
                 }, "Password-1");
             }
 
+            if (!context.Users.Any(u => u.Email == "DemoAdmin@gmail.com"))
+            {
+                userManager.Create(new Models.ApplicationUser
+                {
+                    UserName = "DemoAdmin@gmail.com",
+                    Email = "DemoAdmin@gmail.com",
+
+                    DisplayName = "DemoAdmin@gmail.com"
+                }, "Password-1");
+            }
+            var userId4 = userManager.FindByEmail("DemoAdmin@gmail.com").Id;
+            userManager.AddToRole(userId4, "Admin");
+
+            if (!context.Users.Any(u => u.Email == "DemoProjectManger@gmail.com"))
+            {
+                userManager.Create(new Models.ApplicationUser
+                {
+                    UserName = "DemoProjectManager@gmail.com",
+                    Email = "DemoProjectManager@gmail.com",
+
+                    DisplayName = "DemoProjectManager@gmail.com"
+                }, "Password-1");
+            }
+            var userId5 = userManager.FindByEmail("DemoProjectManager@gmail.com").Id;
+            userManager.AddToRole(userId5, "Project Manager");
+            if (!context.Users.Any(u => u.Email == "DemoDeveloper@gmail.com"))
+            {
+                userManager.Create(new Models.ApplicationUser
+                {
+                    UserName = "DemoDeveloper@gmail.com",
+                    Email = "DemoDeveloper@gmail.com",
+
+                    DisplayName = "DemoDeveloper@gmail.com"
+                }, "Password-1");
+            }
+            var userId6 = userManager.FindByEmail("DemoDeveloper@gmail.com").Id;
+            userManager.AddToRole(userId6, "Developer");
+
+            if (!context.Users.Any(u => u.Email == "DemoSubmitter@gmail.com"))
+            {
+                userManager.Create(new Models.ApplicationUser
+                {
+                    UserName = "DemoSubmitter@gmail.com",
+                    Email = "DemoSubmitter@gmail.com",
+
+                    DisplayName = "DemoSubmitter@gmail.com"
+                }, "Password-1");
+            }
+            var userId7 = userManager.FindByEmail("DemoSubmitter@gmail.com").Id;
+            userManager.AddToRole(userId7, "Submitter");
+
+
+
 
 
             var userId = userManager.FindByEmail("john.aj.mannion@gmail.com").Id;

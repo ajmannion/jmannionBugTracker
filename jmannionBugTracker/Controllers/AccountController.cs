@@ -70,6 +70,7 @@ namespace jmannionBugTracker.Controllers
         {
             if (!ModelState.IsValid)
             {
+                
                 return View(model);
             }
 
@@ -79,7 +80,8 @@ namespace jmannionBugTracker.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Dashboard", "Home");
+                //return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -424,6 +426,54 @@ namespace jmannionBugTracker.Controllers
         {
             return View();
         }
+
+
+        //  Demo login controller
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> DemoLogin(int roleIndex)
+        {
+            var model = new LoginViewModel();
+            model.Password = "Password-1";
+            switch (roleIndex)
+            {
+                case 1:
+                    // login as demo admin
+                    model.Email = "DemoAdmin@gmail.com";
+                    break;
+                case 2:
+                    // login as demo PM
+                    model.Email = "DemoProjectManager@gmail.com";
+                    break;
+                case 3:
+                    // login as demo dev
+                    model.Email = "DemoDeveloper@gmail.com";
+                    break;
+                case 4:
+                default:
+                    // login as demo submitter
+                    model.Email = "DemoSubmitter@gmail.com";
+                    break;
+            }
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, change to shouldLockout: true
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToAction("Dashboard", "Home");
+                //return RedirectToLocal(returnUrl);
+                case SignInStatus.LockedOut:
+                    return View("Lockout");
+                case SignInStatus.RequiresVerification:
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return View(model);
+            }
+        
+    }
+
 
         protected override void Dispose(bool disposing)
         {
