@@ -94,7 +94,7 @@
                     <div class="container">
                         <hr />
                         @if (Model.TicketComments.Count == 0)
-                    {
+                              {
                             <h4 class="bg-primary">No Comments</h4>
                               }
                         @foreach (var comment1 in Model.TicketComments.OrderByDescending(c => c.CreatedDate).Take(3))
@@ -193,7 +193,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.Identity.GetUserId() == (attach1.UserId))
-                {
+                                             {
                                         <button class="btn-xs btn-default">
                                             <a href="@(Url.Action("Delete", "TicketAttach", new { id = attach1.Id }))">Delete A Attachment</a>
                                         </button>
@@ -203,7 +203,7 @@
                                         <button class="btn-xs btn-default">
                                             <a href="@Url.Content(attach1.FileUrl)" target="_blank">View Document</a>
                                         </button>
-                                    }
+                                             }
                                 </div>
                             </div>
 
@@ -313,7 +313,7 @@
 </div>
 
 
-        <div>
+        @*<div>
             <h4>Ticket</h4>
             <hr />
             <dl class="dl-horizontal">
@@ -509,16 +509,16 @@
 
                     <div class="form-group">
                         <div class="col-md-10">
-                            @*@Html.EditorFor(model => model.FileUrl, new { htmlAttributes = new { @class = "form-control" } })*@
-                            <input name="FileUrl" type="file" class="form-control" />
+                            @Html.EditorFor(model => model.FileUrl, new { htmlAttributes = new { @class = "form-control" } })*@
+                            @*<input name="FileUrl" type="file" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             <input type="submit" value="Create" class="btn-xs btn-default" />
                         </div>
-                    </div>
-        }
+                    </div>*@
+        @*}*@
         <p>
             @*<button class="btn-xs btn-default">
                 @Html.ActionLink("Edit", "Edit", new { id = Model.Id })

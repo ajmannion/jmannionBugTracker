@@ -1,4 +1,5 @@
 ﻿
+
 <body>
     <div class="container">
 		<div class="row">
@@ -15,8 +16,8 @@
 							<svg class="glyph stroked bag"><use xlink:href="#stroked-bag"></use></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
-							<div class="large">120</div>
-							<div class="text-muted">New Orders</div>
+							<div class="large">@ViewBag.projectcount</div>
+							<div class="text-muted">Project Count</div>
 						</div>
 					</div>
 				</div>
@@ -28,8 +29,8 @@
 							<svg class="glyph stroked empty-message"><use xlink:href="#stroked-empty-message"></use></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
-							<div class="large">52</div>
-							<div class="text-muted">Comments</div>
+							<div class="large">@ViewBag.ticketcount</div>
+							<div class="text-muted">Ticket Count</div>
 						</div>
 					</div>
 				</div>
@@ -41,8 +42,8 @@
 							<svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
-							<div class="large">24</div>
-							<div class="text-muted">New Users</div>
+							<div class="large">@ViewBag.resovledcount</div>
+							<div class="text-muted">Number of Tickets Resovled</div>
 						</div>
 					</div>
 				</div>
@@ -54,8 +55,8 @@
 							<svg class="glyph stroked app-window-with-content"><use xlink:href="#stroked-app-window-with-content"></use></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
-							<div class="large">25.2k</div>
-							<div class="text-muted">Page Views</div>
+							<div class="large">@ViewBag.usercount</div>
+							<div class="text-muted">User Count</div>
 						</div>
 					</div>
 				</div>
@@ -79,7 +80,7 @@
 			<div class="col-xs-6 col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel">
-						<h4>New Orders</h4>
+						<h4>Project Count</h4>
 						<div class="easypiechart" id="easypiechart-blue" data-percent="92" ><span class="percent">92%</span>
 						</div>
 					</div>
@@ -88,7 +89,7 @@
 			<div class="col-xs-6 col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel">
-						<h4>Comments</h4>
+						<h4>Ticket Count</h4>
 						<div class="easypiechart" id="easypiechart-orange" data-percent="65" ><span class="percent">65%</span>
 						</div>
 					</div>
@@ -97,7 +98,7 @@
 			<div class="col-xs-6 col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel">
-						<h4>New Users</h4>
+						<h4>Resovled Tickets</h4>
 						<div class="easypiechart" id="easypiechart-teal" data-percent="56" ><span class="percent">56%</span>
 						</div>
 					</div>
@@ -106,7 +107,7 @@
 			<div class="col-xs-6 col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel">
-						<h4>Visitors</h4>
+						<h4>User Count</h4>
 						<div class="easypiechart" id="easypiechart-red" data-percent="27" ><span class="percent">27%</span>
 						</div>
 					</div>
@@ -115,24 +116,31 @@
 		</div><!--/.row-->
 								
 		<div class="row">
-			<div class="col-md-8">
+			@*<div class="col-md-8">
 			
-				<div class="panel panel-default chat">
+			<div class="panel panel-default chat">
 					<div class="panel-heading" id="accordion"><svg class="glyph stroked two-messages"><use xlink:href="#stroked-two-messages"></use></svg> Chat</div>
 					<div class="panel-body">
 						<ul>
 							<li class="left clearfix">
 								<span class="chat-img pull-left">
-									<img src="http://placehold.it/80/30a5ff/fff" alt="User Avatar" class="img-circle" />
-								</span>
-								<div class="chat-body clearfix">
+                            
+							<div class="chat-body clearfix">
 									<div class="header">
-										<strong class="primary-font">John Doe</strong> <small class="text-muted">32 mins ago</small>
-									</div>
+                                    @foreach (var comment2 in Model.TicketComments.OrderByDescending(d => d.CreatedDate).Take(3))
+                                    {
+                                        if (Model.TicketComments.Count == 0)
+                                        {
+                                            <h4 class="bg-primary">No Comments</h4>
+                                        }
+
+                                        <p> Comment Created on @Html.DisplayFor(c => comment2.CreatedDate) By: @Html.DisplayFor(b => comment2.User.FirstName) </p>
+								     </div>
 									<p>
-										Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ante turpis, rutrum ut ullamcorper sed, dapibus ac nunc. Vivamus luctus convallis mauris, eu gravida tortor aliquam ultricies. 
-									</p>
-								</div>
+                                        >@Html.DisplayFor(d => comment2.body)
+									</p*
+                             *</div>
+                                    }
 							</li>
 							<li class="right clearfix">
 								<span class="chat-img pull-right">
@@ -171,13 +179,13 @@
 							</span>
 						</div>
 					</div>
-				</div>
+				</div>*@
 				
 			</div><!--/.col-->
 			
-			@*<div class="col-md-4">
+			<div class="col-md-4">
 			
-				<div class="panel panel-blue">
+				@*<div class="panel panel-blue">
 					<div class="panel-heading dark-overlay"><svg class="glyph stroked clipboard-with-paper"><use xlink:href="#stroked-clipboard-with-paper"></use></svg>To-do List</div>
 					<div class="panel-body">
 						<ul class="todo-list">

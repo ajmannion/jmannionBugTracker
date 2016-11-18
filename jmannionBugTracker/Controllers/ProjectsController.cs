@@ -59,6 +59,7 @@ namespace jmannionBugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                project.Owner = User.Identity.GetUserName();
                 db.Projects.Add(project);
                 db.SaveChanges();
                 return RedirectToAction("Index");

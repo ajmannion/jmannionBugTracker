@@ -183,7 +183,7 @@ namespace jmannionBugTracker.Controllers
                     var oldTicketPriority = db.TicketPriorities.Find(oldTicketInfo.TicketPriorityId).Name;
                     var newTicketPriority = db.TicketPriorities.Find(ticket.TicketPriorityId).Name;
                     historyHelper.AddHistory(ticket.Id, "Ticket Type", oldTicketPriority, newTicketPriority, User.Identity.GetUserId());
-                    updateMessage.AppendFormat("Ticket Status: {0}, ", ticket.TicketTypeId);
+                    updateMessage.AppendFormat("Ticket Priority: {0}, ", ticket.TicketTypeId);
                 }
                
                 ticket.Updated = DateTime.Now;

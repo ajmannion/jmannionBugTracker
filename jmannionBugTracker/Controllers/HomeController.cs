@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using jmannionBugTracker.Models;
 
 namespace jmannionBugTracker.Controllers
 {
+    
     public class HomeController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
             return View();
@@ -28,10 +31,16 @@ namespace jmannionBugTracker.Controllers
         }
 
         public ActionResult Dashboard()
-        {
-            ViewBag.Message = "BugTracker Dashboard";
 
-            return View();
+        { 
+                var ticket = db.Tickets;
+                ViewBag.projectcount = db.Projects.Count();
+                ViewBag.ticketcount = db.Tickets.Count();
+                ViewBag.resolvedcount = db.Tickets.Where(t => t.TicketStatusId == 4).Count();
+                ViewBag.opencount = db.Tickets.Where(t => t.TicketStatusId != 4).Count();
+                ViewBag.usercount = db.Users.Count();
+                return View();
+                      
         }
         public ActionResult widgets()
         {

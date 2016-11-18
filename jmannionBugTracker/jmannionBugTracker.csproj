@@ -267,7 +267,8 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="icons.html" />
-    <None Include="Views\Home\Dashboard.cshtml" />
+    <Content Include="Images\blurred-background-2.jpg" />
+    <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Images\bugtracker.jpg" />
     <Content Include="js\bootstrap-datepicker.js" />
     <Content Include="js\bootstrap-table.js" />
