@@ -118,7 +118,7 @@ namespace jmannionBugTracker.Controllers
                 db.Entry(ticketComment).Property("UpdatedDate").IsModified = true;
                 db.Entry(ticketComment).Property("body").IsModified = true;
                 db.SaveChanges();
-                return RedirectToAction("Index", "TicketsComments" , new { id = ticketComment.TicketId });
+                return RedirectToAction("Details", "Tickets" , new { id = ticketComment.TicketId });
             }
             ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", ticketComment.TicketId);
             return View(ticketComment);
@@ -149,7 +149,7 @@ namespace jmannionBugTracker.Controllers
             TicketComment ticketComment = db.TicketComments.Find(id);
             db.TicketComments.Remove(ticketComment);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
         }
 
         protected override void Dispose(bool disposing)

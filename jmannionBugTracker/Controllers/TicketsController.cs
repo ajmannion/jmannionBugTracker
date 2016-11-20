@@ -59,7 +59,7 @@ namespace jmannionBugTracker.Controllers
             return View(tickets);
         }
 
-  
+
 
         // GET: Tickets/Details/5
         [Authorize(Roles = "Admin,Project Manager,Submitter,Developer")]
@@ -85,7 +85,7 @@ namespace jmannionBugTracker.Controllers
             var roles = db.Roles.FirstOrDefault(r => r.Name == "Developer");
             var user = db.Users.Where(u => u.Roles.Any(r => r.RoleId == roles.Id));
             var currentUser = db.Users.Find(User.Identity.GetUserId());
-           
+
 
             var project = currentUser.Projects.ToList();
             ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName");
@@ -111,7 +111,7 @@ namespace jmannionBugTracker.Controllers
                 var currentUser = db.Users.Find(User.Identity.GetUserId());
                 ticket.OwnerUser = currentUser;
                 //ticket.TicketStatusId = 1;
-                ticket.TicketStatusId =db.TicketStatuses.FirstOrDefault(x => x.Name == "Unassigned").Id;
+                ticket.TicketStatusId = db.TicketStatuses.FirstOrDefault(x => x.Name == "Unassigned").Id;
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -166,12 +166,12 @@ namespace jmannionBugTracker.Controllers
 
                 var oldTicketInfo = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
 
-                if ( oldTicketInfo.Title != ticket.Title)
+                if (oldTicketInfo.Title != ticket.Title)
                 {
                     historyHelper.AddHistory(ticket.Id, "Title", oldTicketInfo.Title, ticket.Title, User.Identity.GetUserId());
                     updateMessage.AppendFormat("Ticket Title: {0}, ", ticket.Title);
                 }
-                if (oldTicketInfo.TicketTypeId!= ticket.TicketTypeId)
+                if (oldTicketInfo.TicketTypeId != ticket.TicketTypeId)
                 {
                     var oldTicketType = db.TicketTypes.Find(oldTicketInfo.TicketTypeId).Name;
                     var newTicketType = db.TicketTypes.Find(ticket.TicketTypeId).Name;
@@ -185,7 +185,7 @@ namespace jmannionBugTracker.Controllers
                     historyHelper.AddHistory(ticket.Id, "Ticket Type", oldTicketPriority, newTicketPriority, User.Identity.GetUserId());
                     updateMessage.AppendFormat("Ticket Priority: {0}, ", ticket.TicketTypeId);
                 }
-               
+
                 ticket.Updated = DateTime.Now;
                 db.SaveChanges();
                 // Add Notifcations 
@@ -204,7 +204,7 @@ namespace jmannionBugTracker.Controllers
 
                 return RedirectToAction("Index");
             }
-         
+
             ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName", ticket.AssignedToUserId);
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", ticket.OwnerUserId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
@@ -228,20 +228,54 @@ namespace jmannionBugTracker.Controllers
                 return HttpNotFound();
             }
             return View(ticket);
-           
+
         }
 
-        // POST: Tickets/Delete/5
+        //// POST: Tickets/Delete/5
+        //[Authorize(Roles = "Admin,Project Manager")]
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult DeleteConfirmed(int id)
+        //{
+        //    Ticket ticket = db.Tickets.Find(id);
+        //    db.Tickets.Remove(ticket);
+        //    db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
+
+        //Mark the ticket closed with a "soft delete"
         [Authorize(Roles = "Admin,Project Manager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+
+        public async System.Threading.Tasks.Task<ActionResult> Delete(int id)
         {
             Ticket ticket = db.Tickets.Find(id);
-            db.Tickets.Remove(ticket);
+            var strLoginUser = User.Identity.GetUserId();
+            HistoryHelper audit = new HistoryHelper();
+            audit.AddHistory(ticket.Id, "Status", ticket.TicketStatus.Name, "Resolved", strLoginUser);
+            ticket.TicketStatusId = 4;
+
+            // Sends a notification
+            var developer = db.Users.Find(ticket.AssignedToUserId);
+            if (developer != null && developer.Email != null)
+            {
+                var svc = new EmailService();
+                var msg = new IdentityMessage();
+                msg.Destination = developer.Email;
+                msg.Subject = " Aj's Bug Tracker Update: " + ticket.Title;
+                msg.Body = ("Ticket ID: " + ticket.Id + " - " + ticket.Title + "has been resolved");
+                await svc.SendAsync(msg);
+            }
+
+            db.Tickets.Attach(ticket);
+            db.Entry(ticket).Property("TicketStatusId").IsModified = true;
             db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+
+            return RedirectToAction("Index", new { Id = ticket.Id });
+
+}
+    
         // GET: Tickets/Assign
         [Authorize(Roles = "Admin,Project Manager")]
         public ActionResult AssignTicket(int? id)

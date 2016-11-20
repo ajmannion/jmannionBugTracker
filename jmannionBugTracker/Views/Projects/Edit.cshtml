@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Edit Project Details</h2>
 
 @using (Html.BeginForm())
 {
@@ -66,5 +66,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    <button class="btn-xs btn-default">
+        @Html.ActionLink("Back to List", "Index")
+        </button>
 </div>

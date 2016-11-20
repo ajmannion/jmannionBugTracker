@@ -4,7 +4,7 @@
     <div class="container">
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">Dashboard</h1>
+				<h1 class="page-header"> Aj's Bug Tracker Dashboard</h1>
 			</div>
 		</div><!--/.row-->
 		
@@ -13,7 +13,7 @@
 				<div class="panel panel-blue panel-widget ">
 					<div class="row no-padding">
 						<div class="col-sm-3 col-lg-5 widget-left">
-							<svg class="glyph stroked bag"><use xlink:href="#stroked-bag"></use></svg>
+							<svg class="glyph stroked app-window-with-content"><use xlink:href="#stroked-app-window-with-content"></use></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
 							<div class="large">@ViewBag.projectcount</div>
@@ -26,11 +26,24 @@
 				<div class="panel panel-orange panel-widget">
 					<div class="row no-padding">
 						<div class="col-sm-3 col-lg-5 widget-left">
-							<svg class="glyph stroked empty-message"><use xlink:href="#stroked-empty-message"></use></svg>
+							<svg class="glyph stroked gear"><use xlink:href="#stroked-gear"></use></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
 							<div class="large">@ViewBag.ticketcount</div>
 							<div class="text-muted">Ticket Count</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 col-lg-3">
+				<div class="panel panel-red panel-widget">
+					<div class="row no-padding">
+						<div class="col-sm-3 col-lg-5 widget-left">
+							<svg class="glyph stroked clipboard-with-paper"><use xlink:href="#stroked-clipboard-with-paper"></use></svg>
+						</div>
+						<div class="col-sm-9 col-lg-7 widget-right">
+							<div class="large">@ViewBag.opencount</div>
+							<div class="text-muted">Open Tickets</div>
 						</div>
 					</div>
 				</div>
@@ -42,19 +55,6 @@
 							<svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
-							<div class="large">@ViewBag.resovledcount</div>
-							<div class="text-muted">Number of Tickets Resovled</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-12 col-md-6 col-lg-3">
-				<div class="panel panel-red panel-widget">
-					<div class="row no-padding">
-						<div class="col-sm-3 col-lg-5 widget-left">
-							<svg class="glyph stroked app-window-with-content"><use xlink:href="#stroked-app-window-with-content"></use></svg>
-						</div>
-						<div class="col-sm-9 col-lg-7 widget-right">
 							<div class="large">@ViewBag.usercount</div>
 							<div class="text-muted">User Count</div>
 						</div>
@@ -62,8 +62,17 @@
 				</div>
 			</div>
 		</div><!--/.row-->
-		
 		<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">Recent Projects and Comments </div>
+            <div class="panel-body">
+               
+            </div>
+        </div>
+    </div>
+
+		@*<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">Site Traffic Overview</div>
@@ -73,15 +82,15 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div>*@
 		</div><!--/.row-->
 		
-		<div class="row">
+		@*<div class="row">
 			<div class="col-xs-6 col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel">
 						<h4>Project Count</h4>
-						<div class="easypiechart" id="easypiechart-blue" data-percent="92" ><span class="percent">92%</span>
+						<div class="easypiechart" id="easypiechart-blue" data-percent=66 ><span class="percent">@ViewBag.ticketcountPer</span>
 						</div>
 					</div>
 				</div>
@@ -113,7 +122,7 @@
 					</div>
 				</div>
 			</div>
-		</div><!--/.row-->
+		</div>*@<!--/.row-->
 								
 		<div class="row">
 			@*<div class="col-md-8">
